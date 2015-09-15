@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:600,400,300" rel="stylesheet" type="text/css">
+<title>TrainPlot</title>
+<script>
+
+
+// from http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript/901144#901144
+function getParameterByName(name) {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+  return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+
+function fetch() {
+  console.log("fetch");
+  var path = getParameterByName("path");
+  console.log(path)
+  $.getJSON(path, function(figures) {
+  console.log(figures);
+
+  //$("#main").html("");
+  $.each(figures, function(key, figure) {
+    key = key.replace(' ', '_')
+    if ($("#"+key).length == 0) {
+      $("#main").append('<div id="' + key + '" style="width:600px;height:400px;"> </div>');
+    }
+    FIG = document.getElementById(key);
+    Plotly.newPlot(FIG, figure.data, figure.layout);
+  });
+});
+}
+
+$(document).ready(function() {
+  fetch();
+  timeInterval = setInterval(fetch, 5000); // 5s
+
+  $("#autorefresh").click(function() {
+      if ($("#autorefresh").prop("checked")) {
+        timeInterval = setInterval(fetch, 5000); // 5s
+      } else {
+        clearInterval(timeInterval);
+      }
+  });
+
+});
+
+</script>
+
+</head>
+<body>
+<input id="autorefresh" type="checkbox" name="autorefresh" checked> Auto Refresh <br/> 
+<div id="main"></div>
+</body>
+</html>
