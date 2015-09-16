@@ -1,7 +1,7 @@
 package = "TrainPlot"
 version = "0.1-1"
 source = {
-  url = "file:///home/joe/code/trainplot/"
+  url = "git://github.com/joeyhng/trainplot"
 }
 dependencies = {
   "lua"
