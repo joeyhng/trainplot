@@ -9,13 +9,22 @@ function TrainPlotter:__init(path)
   self.figures = {}
 end
 
+-- Information string displayed in the page
+function TrainPlotter:info(s)
+  self.figures['info_str'] = s
+end
+
 function TrainPlotter:add(fig_id, plot_id, iter, data)
+  if data ~= data then data = -1 end
+  if data == 1/0 then data = 1e-30 end
+  if data == -1/0 then data = -1e-30 end
+
   if not fig_id then
     fig_id = plot_id
   end
 
+  -- create figure if not exists
   if not self.figures[fig_id] then
-    -- create figure
     self.figures[fig_id] = {}
     self.figures[fig_id]['data'] = {}
     self.figures[fig_id]['layout'] = {['title']=fig_id}
