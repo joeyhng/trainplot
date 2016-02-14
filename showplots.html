@@ -61,9 +61,14 @@ function fetch(init) {
       if (figure.data) {
         if ($("#"+key).length == 0) {
           $("#main").append('<div id="' + key + '" style="width:600px;height:400px;"> </div>');
+          FIG = document.getElementById(key);
+          Plotly.newPlot(FIG, figure.data, figure.layout);
+        } else {
+          FIG = document.getElementById(key);
+          FIG.data = figure.data;
+          FIG.layout = figure.layout;
+          Plotly.redraw(FIG);
         }
-        FIG = document.getElementById(key);
-        Plotly.newPlot(FIG, figure.data, figure.layout);
       } else {
         console.log(figure);
         if (init) {
